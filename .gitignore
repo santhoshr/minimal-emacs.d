@@ -1,5 +1,4 @@
 /auto-save-list/
-/custom.el
 /easysession
 /eln-cache/
 /elpa/
@@ -9,9 +8,7 @@
 /ielm-history.eld
 /lisp/
 /post-early-init*.el
-/post-init.el
 /pre-early-init*.el
-/pre-init.el
 /projectile-bookmarks.eld
 /recentf
 /saveplace
