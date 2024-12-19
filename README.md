@@ -1,5 +1,5 @@
 # Minimal ~/.emacs.d - Vanilla Emacs Configuration with Better Defaults and Optimized Startup
-![License](https://img.shields.io/github/license/jamescherti/be-quiet.el)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![](https://raw.githubusercontent.com/jamescherti/minimal-emacs.d/main/.images/made-for-gnu-emacs.svg)
 
 The **minimal-emacs.d** project is a customizable Emacs base that provides **better Emacs defaults and optimized startup**, intended to serve as a solid foundation for a vanilla Emacs configuration.
@@ -597,10 +597,18 @@ To configure `corfu` and `cape`, add the following to `~/.emacs.d/post-init.el`:
 
 ### How to configure elpaca (package manager)
 
-[Add the elpaca bootstrap code](https://github.com/progfolio/elpaca?tab=readme-ov-file#installer) to `~/.emacs.d/pre-init.el`:
-``` elisp
-(setq package-enable-at-startup nil)
+Add to `~/.emacs.d/pre-early-init.el`:
+```elisp
+;; By default, minimal-emacs-package-initialize-and-refresh is set to t, which
+;; makes minimal-emacs.d call the built-in package manager. Since Elpaca will
+;; replace the package manager, there is no need to call it.
+(setq minimal-emacs-package-initialize-and-refresh nil)
+```
 
+(According to arthsmn, a *minimal-emacs.d* user, the change above also improves startup time. [In this user's case](https://github.com/jamescherti/minimal-emacs.d/pull/22), the startup time decreased from 1.06 seconds to 0.56 seconds.)
+
+And [add the elpaca bootstrap code](https://github.com/progfolio/elpaca?tab=readme-ov-file#installer) to `~/.emacs.d/pre-init.el`:
+```elisp
 (defvar elpaca-installer-version 0.8)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -650,7 +658,7 @@ To configure `corfu` and `cape`, add the following to `~/.emacs.d/post-init.el`:
 1. Read the following article from the same author: [Essential Emacs Packages for Efficient Software Development and Text Editing](https://www.jamescherti.com/essential-emacs-packages/)
 
 2. You can also add the following to `~/.emacs.d/post-init.el`:
-``` emacs-lisp
+```emacs-lisp
 ;; Hide warnings and display only errors
 (setq warning-minimum-level :error)
 
@@ -714,7 +722,7 @@ To load customizations saved by Emacs (`M-x customize`), add the following code 
 ### How to increase gc-cons-threshold?
 
 Add the following to `~/.emacs.d/pre-early-init.el` to ensure that *minimal-emacs.d* restores the specified amount after startup:
-``` emacs-lisp
+```emacs-lisp
 (setq minimal-emacs-gc-cons-threshold (* 64 1024 1024))
 ```
 
@@ -750,12 +758,12 @@ Thus, `post-early-init.el` and `pre-init.el` serve different purposes and are no
 The menu bar is disabled by default in *minimal-emacs.d* to provide a minimal, distraction-free environment, which many experienced users prefer.
 
 The menu bar can be re-enabled by adding the following configuration to `~/.emacs.d/pre-early-init.el`:
-```
+```elisp
 (setq minimal-emacs-ui-features '(menu-bar))
 ```
 
 Other UI features can also be enabled by adding the following to `~/.emacs.d/pre-early-init.el`:
-```
+```elisp
 (setq minimal-emacs-ui-features '(context-menu tool-bar menu-bar dialogs tooltips))
 ```
 
@@ -771,6 +779,8 @@ To ensure the *minimal-emacs.d* configuration loads `post-early-init.el`, `pre-i
 ```
 
 This will ensure that the *minimal-emacs.d* configuration loads `post-early-init.el`, `pre-init.el`, and `post-init.el` from `~/.config/minimal-emacs.d/`.
+
+Keep in mind that if you change the `minimal-emacs-user-directory`, *minimal-emacs.d* will attempt to load the rest of the configuration from that directory (e.g., `~/.config/minimal-emacs/post-early-init.el`, `~/.config/minimal-emacs/pre-init.el` and `~/.config/minimal-emacs/post-init.el`, etc.).
 
 ### How to make *minimal-emacs.d* install packages in the early-init phase instead of the init phase?
 
